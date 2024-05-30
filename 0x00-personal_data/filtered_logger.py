@@ -9,7 +9,7 @@ import logging
 
 def filter_datum(
         fields: List[str], redaction: str, message: str, separator: str
-) -> str:
+        ) -> str:
     """The log message obfuscated"""
     allFields = r"(?P<fields>{})=[^{}]*".format('|'.join(fields), separator)
     replace = r"\g<fields>={}".format(redaction)
@@ -18,7 +18,7 @@ def filter_datum(
 
 class RedactingFormatter(logging.Formatter):
     """ Redacting Formatter class
-        """
+    """
 
     REDACTION = "***"
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
@@ -33,6 +33,5 @@ class RedactingFormatter(logging.Formatter):
         """filter values incoming log records"""
         message = super(RedactingFormatter, self).format(record)
         return filter_datum(
-            self.fields, self.REDACTION,
-            message, self.SEPARATOR
+            self.fields, self.REDACTION, message, self.SEPARATOR
         )
