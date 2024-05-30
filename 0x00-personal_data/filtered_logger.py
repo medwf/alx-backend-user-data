@@ -3,7 +3,7 @@
 module personnel data.
 """
 from typing import List
-from re import sub
+import re
 
 
 def filter_datum(
@@ -12,4 +12,4 @@ def filter_datum(
     """The log message obfuscated"""
     allFields = r"(?P<fields>{})=[^{}]*".format('|'.join(fields), separator)
     replace = r"\g<fields>={}".format(redaction)
-    return sub(allFields, replace, message)
+    return re.sub(allFields, replace, message)
