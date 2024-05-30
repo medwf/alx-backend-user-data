@@ -7,8 +7,7 @@ from re import sub
 
 
 def filter_datum(
-        fields: List[str], redaction: str,
-        message: str, separator: str
+        fields: List[str], redaction: str, message: str, separator: str
 ) -> str:
     """The log message obfuscated"""
     allFields = r"(?P<fields>{})=[^{}]*".format('|'.join(fields), separator)
