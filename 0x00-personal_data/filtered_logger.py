@@ -6,14 +6,29 @@ from typing import List
 import re
 import logging
 
+PII_FIELDS = (
+    "name", "email", "phone", "ssn", "password"
+)
+
 
 def filter_datum(
         fields: List[str], redaction: str, message: str, separator: str
-        ) -> str:
+) -> str:
     """The log message obfuscated"""
     allFields = r"(?P<fields>{})=[^{}]*".format('|'.join(fields), separator)
     replace = r"\g<fields>={}".format(redaction)
     return re.sub(allFields, replace, message)
+
+
+def get_logger() -> logging.Logger:
+    """
+    Methods that return an object of Logger
+    """
+    login = logging.Logger("user_data")
+    login.setLevel(logging.INFO)
+    login.propagate = False
+    login.addHandler(logging.StreamHandler().setFormatter(PII_FIELDS))
+    return login
 
 
 class RedactingFormatter(logging.Formatter):
