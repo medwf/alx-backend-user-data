@@ -24,7 +24,7 @@ def get_logger() -> logging.Logger:
     """
     Methods that return an object of Logger
     """
-    login = logging.Logger("user_data")
+    login = logging.getLogger("user_data")
     login.setLevel(logging.INFO)
     login.propagate = False
     login.addHandler(logging.StreamHandler().setFormatter(PII_FIELDS))
