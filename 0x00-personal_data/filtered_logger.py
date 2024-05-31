@@ -14,16 +14,18 @@ PII_FIELDS = (
 
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
-    """connect to database and return connecter"""
+    """create a connector to database"""
     USER_NAME = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
     PASSWORD = os.getenv('PERSONAL_DATA_DB_PASSWORD', '')
     HOST = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
     DATABASE = os.getenv('PERSONAL_DATA_DB_NAME', '')
 
-    return mysql.connector.connect(
+    connector = mysql.connector.connect(
         host=HOST, port=3306, user=USER_NAME,
         password=PASSWORD, database=DATABASE
     )
+
+    return connector
 
 
 def filter_datum(
