@@ -4,11 +4,26 @@ module personnel data.
 """
 from typing import List
 import re
+import os
 import logging
+import mysql.connector
 
 PII_FIELDS = (
     "name", "email", "phone", "ssn", "password"
 )
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """connect to database and return connecter"""
+    USER_NAME = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
+    PASSWORD = os.getenv('PERSONAL_DATA_DB_PASSWORD', '')
+    HOST = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
+    DATABASE = os.getenv('PERSONAL_DATA_DB_NAME', '')
+
+    return mysql.connector.connect(
+        host=HOST, port=3306, user=USER_NAME,
+        password=PASSWORD, database=DATABASE
+    )
 
 
 def filter_datum(
