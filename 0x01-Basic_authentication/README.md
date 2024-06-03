@@ -1,76 +1,42 @@
-# Simple API with Basic Authentication
+# Simple API
 
-## Background Context
+Simple HTTP API for playing with `User` model.
 
-In this project, you will learn about the authentication process and implement Basic Authentication on a simple API.
 
-In the industry, you should not implement your own Basic authentication system and use a module or framework that does it for you (such as Flask-HTTPAuth in Python-Flask). Here, for learning purposes, we will walk through each step of this mechanism to understand it by doing.
+## Files
 
-## Resources
+### `models/`
 
-Read or watch:
+- `base.py`: base of all models of the API - handle serialization to file
+- `user.py`: user model
 
-- [REST API Authentication Mechanisms](https://chatgpt.com/c/ef4dba1f-fed3-4b25-97a7-c53dae11e42c#)
-- [Base64 in Python](https://chatgpt.com/c/ef4dba1f-fed3-4b25-97a7-c53dae11e42c#)
-- [HTTP header Authorization](https://chatgpt.com/c/ef4dba1f-fed3-4b25-97a7-c53dae11e42c#)
-- [Flask](https://chatgpt.com/c/ef4dba1f-fed3-4b25-97a7-c53dae11e42c#)
-- [Base64 - concept](https://chatgpt.com/c/ef4dba1f-fed3-4b25-97a7-c53dae11e42c#)
+### `api/v1`
 
-## Learning Objectives
+- `app.py`: entry point of the API
+- `views/index.py`: basic endpoints of the API: `/status` and `/stats`
+- `views/users.py`: all users endpoints
 
-By the end of this project, you should be able to explain to anyone, without the help of Google:
 
-### General
-- What authentication means
-- What Base64 is
-- How to encode a string in Base64
-- What Basic authentication means
-- How to send the Authorization header
-
-## Requirements
-
-### Python Scripts
-- All your files will be interpreted/compiled on Ubuntu 18.04 LTS using python3 (version 3.7)
-- All your files should end with a new line
-- The first line of all your files should be exactly `#!/usr/bin/env python3`
-- A README.md file, at the root of the folder of the project, is mandatory
-- Your code should use the `pycodestyle` style (version 2.5)
-- All your files must be executable
-- The length of your files will be tested using `wc`
-- All your modules should have documentation (`python3 -c 'print(__import__("my_module").__doc__)'`)
-- All your classes should have documentation (`python3 -c 'print(__import__("my_module").MyClass.__doc__)'`)
-- All your functions (inside and outside a class) should have documentation (`python3 -c 'print(__import__("my_module").my_function.__doc__)' and `python3 -c 'print(__import__("my_module").MyClass.my_function.__doc__)'`)
-- Documentation is not a simple word; it’s a real sentence explaining the purpose of the module, class, or method (the length of it will be verified)
-
-## Project Structure
+## Setup
 
 ```
-simple_api/
-│
-├── app.py                  # Main application file
-├── auth.py                 # Authentication implementation
-├── README.md               # Project documentation
-└── requirements.txt        # List of dependencies
+$ pip3 install -r requirements.txt
 ```
 
-## Usage
 
-1. Run the application:
-    ```bash
-    ./app.py
-    ```
-2. The API will be available at `http://localhost:5000`.
+## Run
 
-## Documentation
+```
+$ API_HOST=0.0.0.0 API_PORT=5000 python3 -m api.v1.app
+```
 
-### Module: `auth`
 
-This module handles the Basic Authentication.
+## Routes
 
-### Class: `BasicAuth`
-
-This class provides methods to authenticate users using Basic Authentication.
-
-### Function: `encode_base64`
-
-Encodes a string in Base64.
+- `GET /api/v1/status`: returns the status of the API
+- `GET /api/v1/stats`: returns some stats of the API
+- `GET /api/v1/users`: returns the list of users
+- `GET /api/v1/users/:id`: returns an user based on the ID
+- `DELETE /api/v1/users/:id`: deletes an user based on the ID
+- `POST /api/v1/users`: creates a new user (JSON parameters: `email`, `password`, `last_name` (optional) and `first_name` (optional))
+- `PUT /api/v1/users/:id`: updates an user based on the ID (JSON parameters: `last_name` and `first_name`)
