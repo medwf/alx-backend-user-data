@@ -17,10 +17,14 @@ CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 auth = None
 
 # create instance from class Auth
-if os.getenv('AUTH_TYPE', None) is not None:
-    from api.v1.auth.auth import Auth
-    # print(f"\033[34m *0 \033[0m")
-    auth = Auth()
+switch = os.getenv('AUTH_TYPE', None)
+if switch:
+    if switch == 'auth':
+        from api.v1.auth.auth import Auth
+        auth = Auth()
+    elif switch == 'basic_auth':
+        from api.v1.auth.basic_auth import BasicAuth
+        auth = BasicAuth()
 
 
 @app.before_request
