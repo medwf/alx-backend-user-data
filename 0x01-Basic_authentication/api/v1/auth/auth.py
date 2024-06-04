@@ -14,7 +14,7 @@ class Auth:
         # add allowing * of end of excluded path
         for exclude in excluded_paths:
             # print(f"\033[33m *1 {exclude} {path}\033[0m")
-            if exclude[-1] != '*' or len(exclude[:-1]) >= len(path):
+            if exclude[-1] != '*' or len(exclude[:-1]) > len(path):
                 # print(f"\033[33m *2 {exclude} {path}\033[0m")
                 continue
             exclude = exclude[:-1]
