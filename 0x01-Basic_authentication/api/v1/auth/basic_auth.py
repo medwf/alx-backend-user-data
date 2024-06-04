@@ -4,6 +4,7 @@ from api.v1.auth.auth import Auth
 from base64 import b64decode, decode
 from typing import Tuple, TypeVar
 from models.user import User
+import binascii
 
 
 class BasicAuth(Auth):
@@ -36,10 +37,10 @@ class BasicAuth(Auth):
             return None
 
         try:
-            data_bytes = b64decode(base64_authorization_header)
-        except Exception:
+            data_bytes = b64decode(base64_authorization_header, validate=True)
+            return data_bytes.decode('utf-8')
+        except (binascii.Error, UnicodeDecodeError):
             return None
-        return data_bytes.decode('utf-8')
 
     def extract_user_credentials(
         self, decoded_base64_authorization_header: str
@@ -70,3 +71,13 @@ class BasicAuth(Auth):
         except Exception:
             pass
         return None
+
+    def current_user(
+        self, request=None
+    ) -> TypeVar('User'):  # type: ignore
+        """overloads Auth and retrieves the User instance for a request"""
+        authorization = self.authorization_header(request)
+        extract_auth = self.extract_base64_authorization_header(authorization)
+        decode_auth = self.decode_base64_authorization_header(extract_auth)
+        user_email, password = self.extract_user_credentials(decode_auth)
+        return self.user_object_from_credentials(user_email, password)
