@@ -34,9 +34,10 @@ def beforeRequest() -> str:
     if auth is not None:
         # print(f"\033[34m *2 {request.path}\033[0m")
         if auth.require_auth(request.path, [
-            '/api/v1/status/',
-            '/api/v1/unauthorized/',
-                '/api/v1/forbidden/']):
+                '/api/v1/unauthorized/',
+                '/api/v1/forbidden/',
+                '/api/v1/stat*'
+        ]):
             # print("\033[34m *3 \033[0m")
             if auth.authorization_header(request) is None:
                 abort(401)
@@ -68,4 +69,4 @@ def forbidden(error) -> str:
 if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
     port = getenv("API_PORT", "5000")
-    app.run(host=host, port=port)
+    app.run(host=host, port=port, debug=True)
