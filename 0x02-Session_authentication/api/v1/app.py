@@ -39,11 +39,15 @@ def beforeRequest() -> str:
         if auth.require_auth(request.path, [
                 '/api/v1/unauthorized/',
                 '/api/v1/forbidden/',
-                '/api/v1/stat*'
+                '/api/v1/stat*',
+                '/api/v1/auth_session/login/'
         ]):
             # print("\033[34m *3 \033[0m")
-            if auth.authorization_header(request) is None:
+            if auth.authorization_header(request) is None and \
+                    auth.session_cookie(request) is None:
                 abort(401)
+            # if auth.authorization_header(request) is None:
+            #     abort(401)
             request.current_user = auth.current_user(request)
             if auth.current_user(request) is None:
                 abort(403)
