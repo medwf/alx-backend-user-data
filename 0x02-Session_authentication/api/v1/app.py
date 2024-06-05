@@ -25,6 +25,9 @@ if switch:
     elif switch == 'basic_auth':
         from api.v1.auth.basic_auth import BasicAuth
         auth = BasicAuth()
+    elif switch == 'session_auth':
+        from api.v1.auth.session_auth import SessionAuth
+        auth = SessionAuth()
 
 
 @app.before_request
@@ -42,8 +45,8 @@ def beforeRequest() -> str:
             if auth.authorization_header(request) is None:
                 abort(401)
             request.current_user = auth.current_user(request)
-            # if auth.current_user(request) is None:
-            #     abort(403)
+            if auth.current_user(request) is None:
+                abort(403)
 
 
 @app.errorhandler(404)
