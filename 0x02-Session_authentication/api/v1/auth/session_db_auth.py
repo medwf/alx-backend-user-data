@@ -2,6 +2,7 @@
 """session database authentication"""
 from .session_exp_auth import SessionExpAuth
 from models.user_session import UserSession
+from datetime import datetime, timedelta
 
 
 class SessionDBAuth(SessionExpAuth):
@@ -23,25 +24,26 @@ class SessionDBAuth(SessionExpAuth):
     def user_id_for_session_id(self, session_id=None):
         """get user_id from session id"""
         try:
-            session = UserSession.search({'session_id': session_id})
+            sessions = UserSession.search({'session_id': session_id})
         except Exception:
             return None
-        if len(session) == 0:
+        if len(sessions) <= 0:
             return None
-        session = session[0]
-        self.user_id_by_session_id[session_id] = {
-            'user_id': session.id,
-            'created_at': session.created_at
-        }
-        return super().user_id_for_session_id(session_id)
+        cur_time = datetime.now()
+        time_span = timedelta(seconds=self.session_duration)
+        exp_time = sessions[0].created_at + time_span
+        if exp_time < cur_time:
+            return None
+        return sessions[0].user_id
 
-    def destroy_session(self, request=None):
+    def destroy_session(self, request=None) -> bool:
         """destroy session"""
         session_id = self.session_cookie(request)
         try:
             delete_session = UserSession.search({'session_id': session_id})
         except Exception:
             return False
-        if len(delete_session) > 0:
-            delete_session[0].remove()
-        return False
+        if len(delete_session) <= 0:
+            return False
+        delete_session[0].remove()
+        return True
