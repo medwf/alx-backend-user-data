@@ -29,6 +29,8 @@ class SessionDBAuth(SessionExpAuth):
     def destroy_session(self, request=None):
         """destroy session"""
         session_id = self.session_cookie(request)
+        if session_id is None:
+            return
         delete_session = UserSession.search({'session_id': session_id})
         if len(delete_session) != 0:
             delete_session[0].remove()
