@@ -10,6 +10,8 @@ class SessionDBAuth(SessionExpAuth):
     def create_session(self, user_id=None):
         """create new session and save session id"""
         session_id = super().create_session(user_id)
+        if session_id is None:
+            return None
         data = dict(self.user_id_by_session_id[session_id])
         data['session_id'] = session_id
         data['created_at'] = data.get(
