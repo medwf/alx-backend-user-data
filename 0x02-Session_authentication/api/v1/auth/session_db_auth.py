@@ -29,4 +29,4 @@ class SessionDBAuth(SessionExpAuth):
         session_id = self.session_cookie(request)
         delete_session = UserSession.search({'session_id': session_id})
         if len(delete_session) != 0:
-            del delete_session[0]
+            delete_session[0].remove()
