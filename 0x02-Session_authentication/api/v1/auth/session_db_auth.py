@@ -22,15 +22,26 @@ class SessionDBAuth(SessionExpAuth):
 
     def user_id_for_session_id(self, session_id=None):
         """get user_id from session id"""
-        UserSession.load_from_file()
-        user_id = super().user_id_for_session_id(session_id)
-        return user_id
+        try:
+            session = UserSession.search({'session_id': session_id})
+        except Exception:
+            return None
+        if len(session) == 0:
+            return None
+        session = session[0]
+        self.user_id_by_session_id[session_id] = {
+            'user_id': session.id,
+            'created_at': session.created_at
+        }
+        return super().user_id_for_session_id(session_id)
 
     def destroy_session(self, request=None):
         """destroy session"""
         session_id = self.session_cookie(request)
-        if session_id is None:
-            return
-        delete_session = UserSession.search({'session_id': session_id})
-        if len(delete_session) != 0:
+        try:
+            delete_session = UserSession.search({'session_id': session_id})
+        except Exception:
+            return False
+        if len(delete_session) > 0:
             delete_session[0].remove()
+        return False
