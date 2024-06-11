@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
-"""
-DataBase module
+"""DB module
 """
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm.session import Session
-from sqlalchemy.exc import NoResultFound, InvalidRequestError
-from user import Base, User
+
+from user import Base
+from user import User
+from typing import TypeVar
 
 
 class DB:
-    """
-    DataBase class
+    """DB class
     """
 
     def __init__(self) -> None:
