@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""DB module
+"""
+DataBase module 
 """
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -10,7 +11,8 @@ from user import Base, User
 
 
 class DB:
-    """DB class
+    """
+    DataBase class 
     """
 
     def __init__(self) -> None:
@@ -31,14 +33,10 @@ class DB:
         return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
-        """create an user and add it to database"""
+        """add_user to add a new user in the db"""
         new_user = User(email=email, hashed_password=hashed_password)
-        try:
-            self._session.add(new_user)
-            self._session.commit()
-        except Exception:
-            self._session.rollback()
-            new_user = None
+        self._session.add(new_user)
+        self._session.commit()
         return new_user
 
     def find_user_by(self, **kwarg) -> User:
