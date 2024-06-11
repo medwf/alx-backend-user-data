@@ -30,16 +30,14 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_user(self, email: str, hashed_password: str) -> None:
+    def add_user(self, email: str, hashed_password: str) -> User:
         """adding user"""
         user = User(email=email, hashed_password=hashed_password)
-
-        se = self._session
-        se.add(user)
-        se.commit()
+        self._session.add(user)
+        self._session.commit()
         return user
 
-    def find_user_by(self, **kwarg):
+    def find_user_by(self, **kwarg) -> User:
         """search for an user in database"""
         for key, value in kwarg.items():
             if hasattr(User, key):
