@@ -14,3 +14,14 @@
     How to encode a string in Base64
     What Basic authentication means
     How to send the Authorization header
+
+# 0x02-session authentication
+
+...
+
+# 0x03- user authentication service
+
+    How to declare API routes in a Flask app
+    How to get and set cookies
+    How to retrieve request form data
+    How to return various HTTP status codes
