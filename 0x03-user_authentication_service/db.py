@@ -31,15 +31,15 @@ class DB:
         return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
-        """adding user"""
-        user = User(email=email, hashed_password=hashed_password)
-        if user:
-            try:
-                self._session.add(user)
-                self._session.commit()
-            except Exception:
-                self._session.rollback()
-        return user
+        """create an user and add it to database"""
+        new_user = User(email=email, hashed_password=hashed_password)
+        try:
+            self._session.add(new_user)
+            self._session.commit()
+        except Exception:
+            self._session.rollback()
+            new_user = None
+        return new_user
 
     def find_user_by(self, **kwarg) -> User:
         """search for an user in database"""
