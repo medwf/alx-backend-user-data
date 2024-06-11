@@ -33,9 +33,10 @@ class DB:
     def add_user(self, email: str, hashed_password: str) -> User:
         """adding user"""
         user = User(email=email, hashed_password=hashed_password)
-        self._session.add(user)
-        self._session.commit()
-        return user
+        if user:
+            self._session.add(user)
+            self._session.commit()
+        return user if user else None
 
     def find_user_by(self, **kwarg) -> User:
         """search for an user in database"""
@@ -44,6 +45,8 @@ class DB:
                 Filter = {key: value}
                 # print(Filter, *Filter)
                 user = self._session.query(User).filter_by(**Filter).one()
+                if user:
+                    break
             else:
                 raise InvalidRequestError()
         if not user:
