@@ -41,18 +41,21 @@ class DB:
         self._session.commit()
         return new_user
 
-    def find_user_by(self, **kwarg) -> User:
+    def find_user_by(self, **kwargs) -> User:
         """search for an user in database"""
-        for key, value in kwarg.items():
+        for key, value in kwargs.items():
             if hasattr(User, key):
                 Filter = {key: value}
-                # print(Filter, *Filter)
-                user = self._session.query(User).filter_by(**Filter).one()
-                if user:
-                    break
+                return self._session.query(User).filter_by(**Filter).one()
             else:
                 raise InvalidRequestError()
-        if not user:
-            raise NoResultFound()
-        # print(user)
-        return user
+        raise NoResultFound()
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """update user in database based on id"""
+        user = self.find_user_by(id=user_id)
+        for key, value in kwargs.items():
+            if not hasattr(user, key):
+                raise ValueError
+            setattr(user, key, value)
+        self._session.commit()
