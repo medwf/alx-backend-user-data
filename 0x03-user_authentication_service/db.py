@@ -34,9 +34,12 @@ class DB:
         """adding user"""
         user = User(email=email, hashed_password=hashed_password)
         if user:
-            self._session.add(user)
-            self._session.commit()
-        return user if user else None
+            try:
+                self._session.add(user)
+                self._session.commit()
+            except Exception:
+                self._session.rollback()
+        return user
 
     def find_user_by(self, **kwarg) -> User:
         """search for an user in database"""
