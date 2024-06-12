@@ -9,13 +9,13 @@ app = Flask(__name__)
 AUTH = Auth()
 
 
-@app.route("/", methods=['GET'])
+@app.route("/", methods=['GET'], strict_slashes=False)
 def hello() -> str:
     """say welcome to the root path"""
     return jsonify({'message': 'Bienvenue'}), 200
 
 
-@app.route('/users', methods=['POST'])
+@app.route('/users', methods=['POST'], strict_slashes=False)
 def users():
     """create a user with post methods"""
     email = request.form.get('email', None)
