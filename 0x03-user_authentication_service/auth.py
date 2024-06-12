@@ -12,6 +12,12 @@ def _hash_password(password: str) -> bytes:
     return hashpw(password.encode(), gensalt())
 
 
+def _generate_uuid() -> str:
+    """generate uuid based on uuid module"""
+    from uuid import uuid4
+    return str(uuid4())
+
+
 class Auth:
     """Auth class to interact with the authentication database.
     """
