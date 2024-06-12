@@ -2,7 +2,7 @@
 """
 Create module basic Flask app
 """
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
 from auth import Auth
 
 app = Flask(__name__)
@@ -27,6 +27,20 @@ def users():
             return jsonify({'message': 'email already registered'}), 400
         return jsonify({'email': email, 'message': 'user created'}), 200
     return jsonify({'message': 'should have email and password'})
+
+
+@app.route('/sessions', methods=['POST'], strict_slashes=False)
+def session():
+    """create session post module"""
+    email = request.form.get('email', None)
+    password = request.form.get('password', None)
+    if email and password and AUTH.valid_login(email, password):
+        session_id = AUTH.create_session(email)
+        if session_id:
+            response = jsonify({'email': email, 'message': 'logged in'})
+            response.set_cookie('session_id', session_id)
+            return response
+    abort(401)
 
 
 if __name__ == '__main__':
