@@ -51,3 +51,12 @@ class Auth:
             return None
         user.session_id = _generate_uuid()
         return user.session_id
+
+    def get_user_from_session_id(self, session_id: str) -> User:
+        """get user based on session id"""
+        if session_id:
+            try:
+                return self._db.find_user_by(session_id=session_id)
+            except Exception:
+                pass
+        return None
